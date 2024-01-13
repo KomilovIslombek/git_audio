@@ -12,16 +12,12 @@
 
 <h4 id="finish"></h4>
 <h4 id="errors"></h4>
-
-<!-- Место для вставки таблицы и аудиоплеера -->
 <div id="audioTableContainer"></div>
 
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
 <script>
     $('body').on('click', function() {
-        console.log("func");
-        // Функция для создания и настройки wavesurfer
         function createWaveSurfer(containerId, audioUrl) {
             var wavesurfer = WaveSurfer.create({
                 container: "#" + containerId,
@@ -57,7 +53,6 @@
             return wavesurfer;
         }
 
-        // Функция для создания HTML-таблицы
         function createAudioTable(data) {
             var tableHtml = '<table class="table table-bordered table-dark"><thead><tr><th>ID</th><th>Name</th><th>Audio</th></tr></thead><tbody>';
 
@@ -72,18 +67,22 @@
             });
 
             tableHtml += '</tbody></table>';
-
             $("#audioTableContainer").html(tableHtml);
 
             data.forEach(item => {
                 var containerId = "audioContainer_" + item.id;
                 item.audio = 'audioContainer_'+item.id+'.mpeg';
 
-                createWaveSurfer(containerId, item.audio);
+                var wavesurfer = createWaveSurfer(containerId, item.audio);
+
+                // Добавим обработчик ошибок в документ
+                wavesurfer.on('error', function (err) {
+                    console.error('Wavesurfer Error:', err);
+                    document.getElementById("errors").innerHTML = 'Wavesurfer Error: ' + err;
+                });
             })
         }
 
-        // AJAX-запрос к серверу для получения данных
         $.ajax({
             url: "https://jsonplaceholder.typicode.com/users",
             success: function(data) {
@@ -92,6 +91,7 @@
             },
             error: function(err) {
                 console.error('err', err);
+                document.getElementById("errors").innerHTML = 'AJAX Error: ' + err.statusText;
             }
         });
     });
