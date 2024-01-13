@@ -1,3 +1,15 @@
+const API = 'https://jsonplaceholder.typicode.com/users';
+const request = document.getElementById("#request");
+
+request.addEventListener("click", () => {
+    fetch(API)
+        .then(res => res.json())
+        .then(users => {
+            
+        })
+        .catch(err => console.log(err))
+})
+
 var wavesurfer = WaveSurfer.create({
     container: "#audiowave",
     waveColor: "#E7D1D3",
