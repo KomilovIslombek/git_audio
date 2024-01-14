@@ -10,6 +10,7 @@
 </head>
 <body>
     
+<h4 id="ready"></h4>
 <h4 id="finish"></h4>
 <h4 id="errors"></h4>
 <div id="audioTableContainer"></div>
@@ -42,6 +43,10 @@
             $("#" + containerId).on("click", function() {
                 console.log("clicked в поля");
                 wavesurfer.playPause();
+            });
+
+            wavesurfer.on('ready', function () {
+                document.getElementById("ready").innerHTML += containerId +' '+'ready <br>';
             });
 
             wavesurfer.on('finish', function () {
